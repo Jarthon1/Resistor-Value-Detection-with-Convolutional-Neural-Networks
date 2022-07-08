@@ -7,7 +7,7 @@ import requests
 import cv2
 import os
 
-def image_retriever (query, output):
+def image_retriever (query, outputname):
     
     # # construct the argument parser and parse the arguments
     # ap = argparse.ArgumentParser()
@@ -17,14 +17,22 @@ def image_retriever (query, output):
     #     help="path to output directory of images")
     # args = vars(ap.parse_args())
 
-    args = {"query":query,"output":output}
+    # get the path to the dataset folder
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    dataset_path = dir_path.rsplit('/',1)[0] + "/dataset/" + outputname
+
+    # check if the output path folder exists, and if not create it
+    if not os.path.exists(dataset_path):
+        os.makedirs(dataset_path)
+    print (dataset_path)
+    args = {"query":query,"output":dataset_path}
 
     # set your Microsoft Cognitive Services API key along with (1) the
     # maximum number of results for a given search and (2) the group size
     # for results (maximum of 50 per request)
     API_KEY = "6eb4f0ef242340cf833efaabdcea21ff"
-    MAX_RESULTS = 5
-    GROUP_SIZE = 5
+    MAX_RESULTS = 1
+    GROUP_SIZE = 1
 
     # set the endpoint API URL
     URL = "https://api.bing.microsoft.com/v7.0/images/search"
@@ -58,7 +66,6 @@ def image_retriever (query, output):
 
     # initialize the total number of images downloaded thus far
     total = 0
-
 
     # loop over the estimated number of results in `GROUP_SIZE` groups
     for offset in range(0, estNumResults, GROUP_SIZE):
@@ -94,7 +101,7 @@ def image_retriever (query, output):
                 # check to see if our exception is in our list of
                 # exceptions to check for
                 if type(e) in EXCEPTIONS:
-                    print("[INFO] skipping: {}".format(v["contentUrl"]))
+                    print("[INFO] skipping: {} due to exception {}".format(v["contentUrl"],e))
                     continue
             
             # try to load the image from disk
@@ -102,11 +109,11 @@ def image_retriever (query, output):
             # if the image is `None` then we could not properly load the
             # image from disk (so it should be ignored)
             if image is None:
-                print("[INFO] deleting: {}".format(p))
+                print("[INFO] deleting: {} because it could not be read".format(p))
                 os.remove(p)
                 continue
             # update the counter
             total += 1
 
 
-image_retriever("240 ohm resistor", "")
+image_retriever("800 ohm resistor with tolerence 2%", "newfolder")
