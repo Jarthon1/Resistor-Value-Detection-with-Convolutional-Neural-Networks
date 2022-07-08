@@ -1,19 +1,11 @@
 # Takes in colors as a string and returns Ohms as a searchable string
 from matplotlib import colors
-import itertools
 
-def GenerateNameAndCalls(uniqueStrings):
-    pass
-
-def GetStrings(uniqueStrings):
-    colors = ["none","black","brown","red","orange","yellow","green","blue","violet","grey","white","gold","silver"]
-    combos = itertools.combinations(colors,3)
-
-def ColorsToOhms(input: str):
+def colors_to_ohms(input: str):
     listInput = input.split()
     res = 0
     # get a list of nums
-    nums = colorsToNums(listInput)
+    nums = colors_to_nums(listInput)
     length = len(nums)
 
     # convert list to string of search query
@@ -27,13 +19,14 @@ def ColorsToOhms(input: str):
         ohm = (nums[0]*10 + nums[1] + nums[2])*10**(nums[3])
         tol = nums[4]
     elif length == 6:
-        ohm = (nums[0]*10 + nums[1] + nums[2] + nums[3])*10**(nums[4])
-        tol = nums[5]
-    res =  str(ohm) + " Ohm Resistor with Tolerance " + str(tol)
+        ohm = (nums[0]*10 + nums[1] + nums[2])*10**(nums[3])
+        tol = nums[4]
+        tmp = nums[5]
+    res =  str(ohm) + " Ohm Resistor with Tolerance " + str(tol) + " and Temperature" + str(tmp)
     return res
 
 # store the numbers in a list
-def colorsToNums(listInput):
+def colors_to_nums(listInput):
     nums = []
     for i in range(len(listInput)):
         if listInput[i] == "none" and i == len(listInput) - 1:
@@ -65,5 +58,3 @@ def colorsToNums(listInput):
         elif listInput[i] == "silver":
             nums.append(10)
     return nums
-
-print(ColorsToOhms("brown black red none"))

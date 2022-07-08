@@ -109,4 +109,4 @@ def image_retriever (query, output):
             total += 1
 
 
-image_retriever("240 ohm resistor", "/Users/josh/Documents/GitHub/Resistor-Value-Detection-with-Convolutional-Neural-Networks/dataset")
+image_retriever("240 ohm resistor", "")
