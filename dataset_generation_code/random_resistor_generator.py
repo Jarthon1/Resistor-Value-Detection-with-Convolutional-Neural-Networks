@@ -1,8 +1,7 @@
-# Generates a random resistor with between 3 and 6 color bands of random colors, valid to the resistor code,
+# Generates a random resistor with 3 to 6 color bands of random colors, valid to the resistor code,
 # It retrieves images of this type of resistor via the Bing api and puts them in an apropriately labled folder
 # within /dataset 
 
-import itertools
 import random
 
 # Hyperparameters
@@ -17,13 +16,29 @@ def random_resistor_generator(uniqueStrings):
     colorsToOhmsList = get_strings(uniqueStrings)
     pass
 
-# create a list of randomly generated strings that represent resistor bands
+# returns a six word string of colors joined by underscores representing 
+# the label of the image
+def get_label(colorString):
+    lst = colorString.split()
+    if len(lst) == 3:
+        while len(lst) < 6:
+            lst.append("none")
+    elif len(lst) == 4:
+        last = lst.pop()
+        lst.append("none")
+        lst.append(last)
+        lst.append("none")
+    elif len(lst) == 5:
+        lst.append("none")
+    return "_".join(lst)
+
+# create a set of unique randomly generated strings that represent resistor bands
 def get_strings(uniqueStrings):
     colorsNone = ["black","brown","red","orange","yellow","green","blue","violet","grey","white","gold","silver","none"]
     colors = ["black","brown","red","orange","yellow","green","blue","violet","grey","white","gold","silver"]
 
-    res = []
-    for i in range(uniqueStrings):
+    res = set()
+    while len(res) < uniqueStrings:
         s = ""
         bands = get_bands()
         for i in range(bands):
@@ -31,7 +46,7 @@ def get_strings(uniqueStrings):
                 s += random.choice(colors) + " "
             else:
                 s += random.choice(colorsNone)
-        res.append(s)
+        res.add(s)
         
     return res
 
