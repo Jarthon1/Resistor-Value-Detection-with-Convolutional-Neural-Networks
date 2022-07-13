@@ -31,8 +31,8 @@ def image_retriever (query, outputname):
     # maximum number of results for a given search and (2) the group size
     # for results (maximum of 50 per request)
     API_KEY = "6eb4f0ef242340cf833efaabdcea21ff"
-    MAX_RESULTS = 1
-    GROUP_SIZE = 1
+    MAX_RESULTS = 5
+    GROUP_SIZE = 5
 
     # set the endpoint API URL
     URL = "https://api.bing.microsoft.com/v7.0/images/search"
@@ -114,6 +114,3 @@ def image_retriever (query, outputname):
                 continue
             # update the counter
             total += 1
-
-
-image_retriever("800 ohm resistor with tolerence 2%", "newfolder")

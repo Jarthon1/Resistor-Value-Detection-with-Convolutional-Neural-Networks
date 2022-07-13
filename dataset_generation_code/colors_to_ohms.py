@@ -1,6 +1,4 @@
 # Takes in colors as a string and returns Ohms as a searchable string
-from matplotlib import colors
-
 def colors_to_ohms(input: str):
     listInput = input.split()
     res = 0
@@ -22,7 +20,11 @@ def colors_to_ohms(input: str):
         ohm = (nums[0]*10 + nums[1] + nums[2])*10**(nums[3])
         tol = nums[4]
         tmp = nums[5]
-    res =  str(ohm) + " Ohm Resistor with Tolerance " + str(tol) + " and Temperature" + str(tmp)
+    if length == 6:
+        res =  str(ohm) + " Ohm Resistor with Tolerance " + str(tol) + " and Temperature" + str(tmp)
+    else:
+        res =  str(ohm) + " Ohm Resistor with Tolerance " + str(tol)
+
     return res
 
 # store the numbers in a list
