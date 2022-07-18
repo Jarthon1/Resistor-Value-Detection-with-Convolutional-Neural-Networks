@@ -11,12 +11,30 @@ from tensorflow.keras.layers import (
     BatchNormalization,
 )
 
-def run_model():
-    # Load in our data from CSV files
-    train_df = pd.read_csv("data/asl_data/sign_mnist_train.csv")
-    valid_df = pd.read_csv("data/asl_data/sign_mnist_valid.csv")
+directory = "/../dataset/"
 
-    # Separate out our target values
+def run_model():
+    # Load image data
+    dataset = keras.utils.image_dataset_from_directory(
+        directory,
+        labels="inferred",
+        label_mode="int",
+        class_names=None,
+        color_mode="rgb",
+        batch_size=32,
+        image_size=(256, 256),
+        shuffle=True,
+        seed=None,
+        validation_split=.1,
+        subset="training",
+        interpolation="bilinear",
+        follow_links=False,
+        crop_to_aspect_ratio=False,
+        **kwargs
+    )
+
+
+    # Assign labels and create vectors
     y_train = train_df['label']
     y_valid = valid_df['label']
     del train_df['label']
