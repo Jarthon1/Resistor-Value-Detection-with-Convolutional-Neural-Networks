@@ -13,52 +13,46 @@ from tensorflow.keras.layers import (
 
 directory = "/../dataset/"
 
-def run_model():
+def load_dataset(subset):
     # Load image data
     dataset = keras.utils.image_dataset_from_directory(
         directory,
         labels="inferred",
-        label_mode="int",
+        label_mode="catagorical",
         class_names=None,
         color_mode="rgb",
         batch_size=32,
-        image_size=(256, 256),
+        image_size=(28, 28),
         shuffle=True,
         seed=None,
         validation_split=.1,
-        subset="training",
+        subset=subset,
         interpolation="bilinear",
         follow_links=False,
         crop_to_aspect_ratio=False,
         **kwargs
     )
+    return dataset
 
+def run_model():
+    
+    training = load_dataset("training")
+    validation = load_dataset("validation")
 
     # Assign labels and create vectors
-    y_train = train_df['label']
-    y_valid = valid_df['label']
-    del train_df['label']
-    del valid_df['label']
+    x_train, y_train = training
+    x_valid, y_valid = validation
 
-    # Separate out our image vectors
-    x_train = train_df.values
-    x_valid = valid_df.values
-
-    # Turn our scalar targets into binary categories
-    num_classes = 24
-    y_train = keras.utils.to_categorical(y_train, num_classes)
-    y_valid = keras.utils.to_categorical(y_valid, num_classes)
-
-    # Normalize our image data
+    num_classes = 
+    # Normalize our image data 
+    # TODO: check if this is necessary once dataset is here
     x_train = x_train / 255
     x_valid = x_valid / 255
 
-    x_train = x_train.reshape(-1,28,28,1)
-    x_valid = x_valid.reshape(-1,28,28,1)
-
+    # Create the model
     model = Sequential()
     model.add(Conv2D(75, (3, 3), strides=1, padding="same", activation="relu", 
-                    input_shape=(28, 28, 1)))
+                    input_shape=(28, 28, 3)))
     model.add(BatchNormalization())
     model.add(MaxPool2D((2, 2), strides=2, padding="same"))
     model.add(Conv2D(50, (3, 3), strides=1, padding="same", activation="relu"))
