@@ -1,8 +1,7 @@
-import tensorflow.keras as keras
-import pandas as pd
+import keras as keras
 
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import (
+from keras.models import Sequential
+from keras.layers import (
     Dense,
     Conv2D,
     MaxPool2D,
@@ -29,8 +28,7 @@ def load_dataset(subset):
         subset=subset,
         interpolation="bilinear",
         follow_links=False,
-        crop_to_aspect_ratio=False,
-        **kwargs
+        crop_to_aspect_ratio=False
     )
     return dataset
 
@@ -70,3 +68,5 @@ def run_model():
     model.compile(loss="categorical_crossentropy", metrics=["accuracy"])
 
     model.fit(x_train, y_train, epochs=20, verbose=1, validation_data=(x_valid, y_valid))
+
+    return model
