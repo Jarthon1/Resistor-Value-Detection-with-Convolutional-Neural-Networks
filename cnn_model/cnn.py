@@ -43,7 +43,7 @@ def run_model():
     x_train, y_train = training
     x_valid, y_valid = validation
 
-    num_classes = 
+    num_classes = 11
     # Normalize our image data 
     # TODO: check if this is necessary once dataset is here
     x_train = x_train / 255
