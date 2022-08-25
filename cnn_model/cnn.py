@@ -38,8 +38,8 @@ def run_model():
     validation = load_dataset("validation")
 
     # Assign labels and create vectors
-    x_train, y_train = training
-    x_valid, y_valid = validation
+    (x_train, y_train) = training
+    (x_valid, y_valid) = validation
 
     num_classes = 11
     # Normalize our image data 
@@ -67,6 +67,8 @@ def run_model():
 
     model.compile(loss="categorical_crossentropy", metrics=["accuracy"])
 
-    model.fit(x_train, y_train, epochs=20, verbose=1, validation_data=(x_valid, y_valid))
+    model.summary()
+
+    model.fit(training.image, y_train, epochs=20, verbose=1, validation_data=(x_valid, y_valid))
 
     return model
