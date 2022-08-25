@@ -1,5 +1,7 @@
 import keras as keras
+import scipy
 
+from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers import (
     Dense,
@@ -10,32 +12,53 @@ from keras.layers import (
     BatchNormalization,
 )
 
-directory = "/../dataset/"
+directory = "/Users/golden/Desktop/Projects/CNN_Resistors/dataset/hb74ynkjcn-1"
 
-def load_dataset(subset):
-    # Load image data
-    dataset = keras.utils.image_dataset_from_directory(
-        directory,
-        labels="inferred",
-        label_mode="catagorical",
-        class_names=None,
-        color_mode="rgb",
-        batch_size=32,
-        image_size=(28, 28),
-        shuffle=True,
-        seed=None,
-        validation_split=.1,
-        subset=subset,
-        interpolation="bilinear",
-        follow_links=False,
-        crop_to_aspect_ratio=False
-    )
-    return dataset
+# def load_dataset(train_or_validate):
+#     # Load image data
+#     dataset = keras.utils.image_dataset_from_directory(
+#         directory,
+#         labels="inferred",
+#         label_mode="categorical",
+#         class_names=None,
+#         color_mode="rgb",
+#         batch_size=32,
+#         image_size=(28, 28),
+#         shuffle=True,
+#         seed=42,
+#         validation_split=.1,
+#         subset=train_or_validate,
+#         interpolation="bilinear",
+#         follow_links=False,
+#         crop_to_aspect_ratio=False
+#     )
+#     return dataset
 
 def run_model():
     
-    training = load_dataset("training")
-    validation = load_dataset("validation")
+    datagen_train = ImageDataGenerator(
+        rotation_range=10,  # randomly rotate images in the range (degrees, 0 to 180)
+        zoom_range=0.1,  # Randomly zoom image
+        width_shift_range=0.1,  # randomly shift images horizontally (fraction of total width)
+        height_shift_range=0.1,  # randomly shift images vertically (fraction of total height)
+        horizontal_flip=True,  # randomly flip images horizontally
+        vertical_flip=False, # Don't randomly flip images vertically)
+    )
+    datagen_valid = ImageDataGenerator(samplewise_center=True)
+
+    training = datagen_train.flow_from_directory(
+        "/Users/golden/Desktop/Projects/CNN_Resistors/dataset/train",
+        target_size=(28,28),
+        color_mode="rgb",
+        class_mode="categorical",
+    )
+    # load and iterate validation dataset
+    validation = datagen_valid.flow_from_directory(
+        "/Users/golden/Desktop/Projects/CNN_Resistors/dataset/valid",
+        target_size=(28,28),
+        color_mode="rgb",
+        class_mode="categorical",
+    )
 
     # Assign labels and create vectors
     x_train, y_train = training
@@ -67,6 +90,7 @@ def run_model():
 
     model.compile(loss="categorical_crossentropy", metrics=["accuracy"])
 
+    # Run the Model 
     model.fit(x_train, y_train, epochs=20, verbose=1, validation_data=(x_valid, y_valid))
-
+    # model.fit(training.x, training.y, epochs=20, verbose=1, validation_data=validation)
     return model
