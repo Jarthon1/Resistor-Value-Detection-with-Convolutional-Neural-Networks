@@ -1,5 +1,6 @@
-import keras as keras
-import scipy
+import tensorflow
+import tensorflow.keras as keras
+# import scipy
 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
@@ -12,7 +13,7 @@ from keras.layers import (
     BatchNormalization,
 )
 
-directory = "/Users/golden/Desktop/Projects/CNN_Resistors/dataset/hb74ynkjcn-1"
+directory = "/Users/golden/Desktop/Projects/CNN_Resistors/Resistor-Value-Detection-with-Convolutional-Neural-Networks/dataset/hb74ynkjcn-1"
 
 # def load_dataset(train_or_validate):
 #     # Load image data
@@ -47,28 +48,28 @@ def run_model():
     datagen_valid = ImageDataGenerator(samplewise_center=True)
 
     training = datagen_train.flow_from_directory(
-        "/Users/golden/Desktop/Projects/CNN_Resistors/dataset/train",
+        "/Users/golden/Desktop/Projects/CNN_Resistors/Resistor-Value-Detection-with-Convolutional-Neural-Networks/dataset/train",
         target_size=(28,28),
         color_mode="rgb",
-        class_mode="categorical",
+        class_mode="categorical"
     )
     # load and iterate validation dataset
     validation = datagen_valid.flow_from_directory(
-        "/Users/golden/Desktop/Projects/CNN_Resistors/dataset/valid",
+        "/Users/golden/Desktop/Projects/CNN_Resistors/Resistor-Value-Detection-with-Convolutional-Neural-Networks/dataset/valid",
         target_size=(28,28),
         color_mode="rgb",
-        class_mode="categorical",
+        class_mode="categorical"
     )
 
     # Assign labels and create vectors
-    (x_train, y_train) = training
-    (x_valid, y_valid) = validation
+    # x_train, y_train = training
+    # x_valid, y_valid = validation
 
     num_classes = 11
     # Normalize our image data 
     # TODO: check if this is necessary once dataset is here
-    x_train = x_train / 255
-    x_valid = x_valid / 255
+    # x_train = x_train / 255
+    # x_valid = x_valid / 255
 
     # Create the model
     model = Sequential()
@@ -90,9 +91,7 @@ def run_model():
 
     model.compile(loss="categorical_crossentropy", metrics=["accuracy"])
 
-
     # Run the Model 
-    model.fit(x_train, y_train, epochs=20, verbose=1, validation_data=(x_valid, y_valid))
+    model.fit(training, epochs=20, verbose=1, validation_data=validation)
     # model.fit(training.x, training.y, epochs=20, verbose=1, validation_data=validation)
-
     return model
